@@ -4,7 +4,6 @@ pragma solidity 0.8.8;
 // EVM compatible: avalanche, fantom, polygon
 
 contract SimpleStorage {
-
     // type name visibility return
     // Initalized to zero
     uint256 favoriteNumber;
@@ -16,19 +15,17 @@ contract SimpleStorage {
 
     mapping(string => uint256) public nameToFavoriteNumber;
 
-
     struct People {
         uint256 favoriteNumber;
         string name;
     }
 
-    function store(uint256 _favoriteNumber) public {
+    function store(uint256 _favoriteNumber) public virtual {
         favoriteNumber = _favoriteNumber;
         // for each thing we do, costs for gas
     }
 
-    function retreive() public view returns(uint256)
-    {
+    function retreive() public view returns (uint256) {
         return favoriteNumber;
     }
 
@@ -43,11 +40,10 @@ contract SimpleStorage {
     // }
 }
 
-
 // Contract address: 0xd9145CCE52D386f254917e481eB44e9943F39138
 
 // view, pure -> when called alone dont spend gas, that are just looking at it, cant change state
-// pure cant look at blockchain stuff, use for math operations 
+// pure cant look at blockchain stuff, use for math operations
 // if you call view function in function that costs gas, then will pay gas for retrieve function
 // blue buttons are viewing, no transaction, orange buttons are transactions green checkmark
 
@@ -56,5 +52,3 @@ contract SimpleStorage {
 // calldata: variables exist only in scope, cant change calldata variable
 // memory: variables exist only in scope
 // Storage: variables exist outside function (favoriteNumber)
-
-
