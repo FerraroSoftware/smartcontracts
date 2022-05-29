@@ -6,46 +6,56 @@ import "./PriceConverter.sol";
 // Withdraw funds
 // Set min funding value in usd
 
-contract FundMe {
+// current tx cost: 837,033, changing minusd to const: 817,479
 
+// constant, immuntable -> help lower gas, gas optimizations 5 hours in
+// immutable if not on same line, i.e constructor called
+// these get put in byte code of contract instead
+
+error NotOwner();
+
+contract FundMe {
     using PriceConverter for uint256;
 
-    uint256 public minUsd = 50 * 1e18;
+    // no longer in storage
+    uint256 public constant MINDUSD = 50 * 1e18;
 
     address[] public funders;
     mapping(address => uint256) public addressToAmountFunded;
 
-    address public owner;
+    address public immutable i_owner;
 
     constructor() {
-
         // Set owner to who deployed the contract
-        owner = msg.sender;
+        i_owner = msg.sender;
     }
 
     // payable makes function red
-    function fund() public payable{
+    function fund() public payable {
         // Want to be able to set min funds
         // 1. how do we send eth to this contract
         // 1 ETH required
         // msg.value.getConversionRate(msg.value);
         // msg.value is considered the param (first param) for the library function call. if another param, pass to function next
-        require(msg.value.getConversionRate() > minUsd, "Didnt send enough");
-        // 18 decimals: 1000000000000000000 wei 
+        require(msg.value.getConversionRate() > MINDUSD, "Didnt send enough");
+        // 18 decimals: 1000000000000000000 wei
         // what is reverting?
         // undo any action before and send remaining gas back
 
-        // sender is address , value is amount 
+        // sender is address , value is amount
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] = msg.value;
     }
 
     function withdraw() public onlyOwner {
-
         // require(msg.sender == owner, "sender is not owner");
 
         // Clean out map
-        for (uint256 funderIndex = 0; funderIndex < funders.length; funderIndex++){
+        for (
+            uint256 funderIndex = 0;
+            funderIndex < funders.length;
+            funderIndex++
+        ) {
             address funder = funders[funderIndex];
             addressToAmountFunded[funder] = 0;
         }
@@ -62,15 +72,28 @@ contract FundMe {
         // send
         // bool sendSuccess = payable(msg.sender).send(address(this).balance);
         // require(sendSuccess, "Send failed");
-        
+
         // call - recommended way atm
-        (bool callSucess,) = payable(msg.sender).call{value: address(this).balance}("");
+        (bool callSucess, ) = payable(msg.sender).call{
+            value: address(this).balance
+        }("");
         require(callSucess, "Call failed");
     }
 
-    modifier onlyOwner {
-        require(msg.sender == owner, "sender is not owner");
+    modifier onlyOwner() {
+        // require(msg.sender == i_owner, "sender is not owner");
+        if (msg.sender != i_owner) {
+            revert NotOwner();
+        } // gas optimization because not sending full string, doing function call meant for it
         _;
     }
 
+    // what happens if someone sends this contract eth without calling the fund function?
+    receive() external payable {
+        fund();
+    }
+
+    fallback() external payable {
+        fund();
+    }
 }
