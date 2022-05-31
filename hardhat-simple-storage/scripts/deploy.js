@@ -30,6 +30,9 @@ async function main() {
   console.log(`Updated value is: ${updatedValue}`);
 }
 
+// Another way to write functions
+// const verify = async (contractADdress, args) => {}
+
 async function verify(contractAddress, args) {
   console.log("Verifying contract...");
   try {
