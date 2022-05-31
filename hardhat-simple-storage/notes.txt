@@ -1,7 +1,6 @@
 yarn init 
 yarn add --dev hardhat
 yarn hardhat
-yarn hardhat
 yarn hardhat accounts
 yarn hardhat compile
 yarn hardhat run scripts/deploy.js 
@@ -10,3 +9,14 @@ yarn hardhat run scripts/deploy.js --network hardhat
 # have node to live past script running ... localhost added to hardhat config
 yarn hardhat node
 yarn hardhat run scripts/deploy.js --network localhost
+
+# console
+yarn hardhat console --network localhost
+const SimpleStorageFactory = await ethers.getContractFactory("SimpleStorage");
+const simpleStorage = await SimpleStorageFactory.deploy();
+await simpleStorage.retrieve();
+await simpleStorage.store("10")
+await simpleStorage.retrieve();
+
+# clean if issues
+yarn hardhat clean
