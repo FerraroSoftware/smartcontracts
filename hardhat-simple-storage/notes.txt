@@ -6,3 +6,7 @@ yarn hardhat accounts
 yarn hardhat compile
 yarn hardhat run scripts/deploy.js 
 yarn hardhat run scripts/deploy.js --network hardhat
+
+# have node to live past script running ... localhost added to hardhat config
+yarn hardhat node
+yarn hardhat run scripts/deploy.js --network localhost
