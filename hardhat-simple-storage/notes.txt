@@ -20,3 +20,7 @@ await simpleStorage.retrieve();
 
 # clean if issues
 yarn hardhat clean
+
+# testing
+yarn hardhat test
+yarn hardhat test --grep store # runs looking for greped word in string
