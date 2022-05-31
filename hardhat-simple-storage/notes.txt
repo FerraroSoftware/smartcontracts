@@ -1,0 +1,8 @@
+yarn init 
+yarn add --dev hardhat
+yarn hardhat
+yarn hardhat
+yarn hardhat accounts
+yarn hardhat compile
+yarn hardhat run scripts/deploy.js 
+yarn hardhat run scripts/deploy.js --network hardhat
