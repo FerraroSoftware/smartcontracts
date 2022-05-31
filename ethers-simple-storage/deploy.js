@@ -5,9 +5,18 @@ require("dotenv").config();
 
 async function main() {
   // Endpoint to connect to ganache
-  const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+  const provider = new ethers.providers.JsonRpcProvider(
+    process.env.RPC_URL_ALCH
+  );
   // Private key to sign transactions from ganache
   const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+  const encryptedJson = fs.readFileSync("./.encryptedKey.json", "utf8");
+  //   let wallet = new ethers.Wallet.fromEncryptedJsonSync(
+  //     encryptedJson,
+  //     process.env.PRIVATE_KEY_PASSWORD
+  //   );
+  //   wallet = await wallet.connect(provider);
+
   // Sync to wait
   const abi = fs.readFileSync("./SimpleStorage_sol_SimpleStorage.abi", "utf8");
   const binary = fs.readFileSync(
@@ -27,6 +36,7 @@ async function main() {
   // Waiting 1 block confirmation, you only get this if you wait 1 block confirmation
   //   const transactionReceipt = await contract.deployTransaction.wait(1);
   await contract.deployTransaction.wait(1);
+  console.log(`Contract address: ${contract.address}`);
   //   console.log("here is the deployment transaction (transaction response): ");
   //   console.log(contract.deployTransaction);
   //   console.log("Here is transaction receipt");
@@ -69,6 +79,8 @@ main()
     console.error(error);
     process.exit(1);
   });
+
+// alchemy is like ganache
 
 // synchronus [solidity]
 // async [js]
