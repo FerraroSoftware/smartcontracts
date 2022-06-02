@@ -1,0 +1,7 @@
+notes:
+
+yarn add --dev hardhat
+yarn hardhat
+advanced
+
+yarn solhint contracts/\*.sol
