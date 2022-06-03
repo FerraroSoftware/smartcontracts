@@ -29,6 +29,8 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   // uses whatever you use with --network flag, yarn hardhat deploy --network rinkeby
   //   const ethUsdPriceFeedAddress = networkConfig[chainId]["ethUsdPriceFeed"];
+
+  // Make the pricefeed dynamic for local vs testing
   let ethUsdPriceFeedAddress;
   if (developmentChains.includes(network.name)) {
     const ethUsdAggregator = await deployments.get("MockV3Aggregator");

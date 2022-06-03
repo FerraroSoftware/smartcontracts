@@ -5,3 +5,11 @@ yarn hardhat
 advanced
 
 yarn solhint contracts/\*.sol
+
+# unlocks `hardhat deploy`, make sure to delete deploy.js
+
+yarn add --dev @nomiclabs/hardhat-ethers@npm:hardhat-deploy-ethers ethers
+
+# allows us to override hardhat ethers which is overriding ethers
+
+yarn add --dev @nomiclabs/hardhat-ethers@npm:hardhat-deploy-ethers ethers
