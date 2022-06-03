@@ -6,3 +6,9 @@ Contracts include
 - Fund me
 
 Full stack examples can be found as well
+
+TODO:
+- Smart contract lottery
+- NFTs
+- DAOS
+- Auditing
