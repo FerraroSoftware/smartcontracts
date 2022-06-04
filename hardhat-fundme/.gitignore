@@ -1,3 +1,4 @@
+deployments
 node_modules
 .env
 coverage
@@ -7,4 +8,3 @@ typechain
 #Hardhat files
 cache
 artifacts
-deployments

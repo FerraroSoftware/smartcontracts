@@ -14,13 +14,13 @@ developmentChains.includes(network.name)
         //   accounts = await ethers.getSigners();
         deployer = (await getNamedAccounts()).deployer;
         fundMe = await ethers.getContract("FundMe", deployer);
-        //   deployer = accounts[0];
-        //   await deployments.fixture(["fundMe"]);
-        //   fundMe = await ethers.getContract("FundMe", deployer);
-        //   mockV3Aggregator = await ethers.getContract(
-        //     "MockV3Aggregator",
-        //     deployer
-        //   );
+        deployer = accounts[0];
+        await deployments.fixture(["fundMe"]);
+        fundMe = await ethers.getContract("FundMe", deployer);
+        mockV3Aggregator = await ethers.getContract(
+          "MockV3Aggregator",
+          deployer
+        );
       });
 
       it("allows people fund and withdraw", async function () {
