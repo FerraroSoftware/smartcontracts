@@ -1,13 +1,8 @@
-const { inputToConfig } = require("@ethereum-waffle/compiler");
-const { assert } = require("chai");
-const { deployments, ethers, getNamedAccounts } = require("hardhat");
+const { assert, expect } = require("chai");
+const { network, deployments, ethers } = require("hardhat");
+const { developmentChains } = require("../../helper-hardhat-config");
 
-describe("FundMe", async function () {
-  // deploy our fundme contract
-  // using hardhat deploy
-  // const accounts = await ethers.getSigners()
-  // const accountZero = accounts[0]
-
+describe("FundMe", function () {
   let fundMe;
   let mockV3Aggregator;
   let deployer;
@@ -20,9 +15,10 @@ describe("FundMe", async function () {
     fundMe = await ethers.getContract("FundMe", deployer);
     mockV3Aggregator = await ethers.getContract("MockV3Aggregator", deployer);
   });
-  describe("constructor", async function () {
-    it("sets the aggreagtor address correctly", async function () {
-      const response = await fundMe.priceFeed();
+
+  describe("constructor", function () {
+    it("sets the aggregator addresses correctly", async () => {
+      const response = await fundMe.getPriceFeed();
       assert.equal(response, mockV3Aggregator.address);
     });
   });
@@ -39,16 +35,15 @@ describe("FundMe", async function () {
     // but this is good enough for now
     it("Updates the amount funded data structure", async () => {
       await fundMe.fund({ value: sendValue });
-      const response = await fundMe.addressToAmountFunded(deployer);
+      const response = await fundMe.getAddressToAmountFunded(deployer);
       assert.equal(response.toString(), sendValue.toString());
     });
     it("Adds funder to array of funders", async () => {
       await fundMe.fund({ value: sendValue });
-      const response = await fundMe.funders(0);
+      const response = await fundMe.getFunder(0);
       assert.equal(response, deployer);
     });
   });
-
   describe("withdraw", function () {
     beforeEach(async () => {
       await fundMe.fund({ value: sendValue });
@@ -65,7 +60,6 @@ describe("FundMe", async function () {
       // Act
       const transactionResponse = await fundMe.withdraw();
       const transactionReceipt = await transactionResponse.wait();
-
       const { gasUsed, effectiveGasPrice } = transactionReceipt;
       const gasCost = gasUsed.mul(effectiveGasPrice);
 
