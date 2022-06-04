@@ -13,3 +13,29 @@ yarn add --dev @nomiclabs/hardhat-ethers@npm:hardhat-deploy-ethers ethers
 # allows us to override hardhat ethers which is overriding ethers
 
 yarn add --dev @nomiclabs/hardhat-ethers@npm:hardhat-deploy-ethers ethers
+
+# gas optimizations: 
+when we store global varibles -> get put in storage, giant array
+dynamic values are stored via hash functions, but still put in storage, but as array length in the slot. real array stored elsewhere
+
+const and immutable varibles dont take up storage
+
+variables in function not in storage, own memory 
+
+need memory for strings, because its technically dynamic sized array 
+
+anytime you write/read from STORAGE, you spend a lot of gas 
+the bytecode after compiling, is mapped to opcodes, and gas is based off those opcodes 
+https://github.com/crytic/evm-opcodes
+
+SLOAD: load word from storage, 800
+SSTORE: save word to storage, 20000
+
+for naming variables:
+s_ for storage
+i_ immutable
+X  all caps for constants
+
+when accessing storage arrays, we can copy it to memory locally in function and use that instead
+
+internal and private variables are cheaper gas wise, then use getters

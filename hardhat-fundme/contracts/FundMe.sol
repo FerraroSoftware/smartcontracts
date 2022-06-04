@@ -60,11 +60,13 @@ contract FundMe {
     }
 
     function withdraw() public payable onlyOwner {
+        // if we looped over s_funders, and it grows large, we are reading lots from storage! bad
         for (
             uint256 funderIndex = 0;
             funderIndex < s_funders.length;
             funderIndex++
         ) {
+            // if accessesing s_funders instead, lots of reading from storage
             address funder = s_funders[funderIndex];
             s_addressToAmountFunded[funder] = 0;
         }
@@ -78,6 +80,7 @@ contract FundMe {
     function cheaperWithdraw() public payable onlyOwner {
         address[] memory funders = s_funders;
         // mappings can't be in memory, sorry!
+
         for (
             uint256 funderIndex = 0;
             funderIndex < funders.length;
